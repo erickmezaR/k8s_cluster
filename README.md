@@ -1,7 +1,7 @@
 # k8s_cluster
 a kubernetes cluster using calico
 
-#How to use
+# How to use
 setup your Vagrant directory and start the  Kubernetes cluster, this will start one master and five nodes:
 
 vagrant up
@@ -24,6 +24,8 @@ If more nodes are required, you can edit the servers array in the Vagrantfile
     
 you can choose the ram, cpu and ip for every VM
 
-#Clean-up
-
+# Clean-up
 vagrant destroy -f
+
+# pause the cluster
+vagrant halt
