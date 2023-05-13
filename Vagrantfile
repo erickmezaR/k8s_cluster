@@ -38,15 +38,15 @@ servers = [
         :mem => "3072",
         :cpu => "4"
     },
-	{
-        :name => "k8s-worker-4",
-        :type => "node",
-        :box => "ubuntu/jammy64",
-        #:box_version => "20180831.0.0",
-        :eth1 => "192.168.56.34",
-        :mem => "3072",
-        :cpu => "4"
-    },
+#	{
+#        :name => "k8s-worker-4",
+#        :type => "node",
+#        :box => "ubuntu/jammy64",
+#        #:box_version => "20180831.0.0",
+#        :eth1 => "192.168.56.34",
+#        :mem => "3072",
+#        :cpu => "4"
+#    },
 #    {
 #        :name => "k8s-worker-5",
 #        :type => "node",
@@ -181,7 +181,7 @@ sshpass -p "vagrant" scp -o StrictHostKeyChecking=no vagrant@192.168.56.30:/etc/
 sh ./kubeadm_join_cmd.sh
    
 # required for setting up different ip internal
-IP_ADDR=`ifconfig enp0s8 | grep Mask | awk '{print $2}'| cut -f2 -d:`
+IP_ADDR=`ifconfig enp0s8 | grep -w inet | awk '{print $2}'| cut -f2 -d:`
 sudo sed -i "/^[^#]*# the .N/c\Environment="KUBELET_EXTRA_ARGS=--node-ip=$IP_ADDR"" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
 #restart services
