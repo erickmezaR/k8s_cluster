@@ -109,6 +109,17 @@ sudo apt install -y containerd.io  > /dev/null 2>&1
 containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
 sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
 
+#configure crictl to be usable https://github.com/containerd/containerd/blob/main/docs/cri/crictl.md
+cat <<EOF  | sudo tee /etc/crictl.yaml
+runtime-endpoint: unix:///run/containerd/containerd.sock
+image-endpoint: unix:///run/containerd/containerd.sock
+timeout: 10
+debug: true
+pull-image-on-create: false
+disable-pull-on-run: false
+EOF
+
+
 #Restart and enable containerd service
 sudo systemctl restart containerd
 sudo systemctl enable containerd
