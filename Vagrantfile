@@ -92,7 +92,7 @@ sudo apt-get install -y net-tools > /dev/null 2>&1
 sudo apt-get install -y apt-transport-https > /dev/null 2>&1
 sudo apt-get install -y software-properties-common > /dev/null 2>&1
 sudo apt-get install -y curl > /dev/null 2>&1
-echo "after isntall net-tools"
+echo "after install net-tools"
 
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo usermod -aG docker vagrant
@@ -104,12 +104,18 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 #Now, run following apt command to install containerd
 sudo apt update
 sudo apt install -y containerd.io  > /dev/null 2>&1
+sudo apt-get install -y docker-ce > /dev/null 2>&1
+
+#grant permission to run docker as vagrant user
+sudo groupadd docker
+sudo usermod -aG docker vagrant
+newgrp docker
 
 #Configure containerd so that it starts using systemd as cgroup.
 containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
 sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
 
-#configure crictl to be usable https://github.com/containerd/containerd/blob/main/docs/cri/crictl.md
+#configure crictl to be usable https://github.com/containerd/containerd/blob/main/docs/cri/crictl.md && https://www.cyberithub.com/how-to-install-and-use-crictl-on-linux-using-10-easy-steps/
 cat <<EOF  | sudo tee /etc/crictl.yaml
 runtime-endpoint: unix:///run/containerd/containerd.sock
 image-endpoint: unix:///run/containerd/containerd.sock
